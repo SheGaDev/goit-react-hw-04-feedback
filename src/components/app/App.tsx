@@ -16,27 +16,19 @@ export type State = {
   bad: number;
 };
 
-function updateState(state: State, name: LeaveFeedback) {
+function reducer(state: State, name: LeaveFeedback) {
   return {
     ...state,
     [name]: state[name] + 1,
   };
 }
 
-function reducer(state: State, name: LeaveFeedback) {
-  return updateState(state, name);
-}
-
 const App = () => {
-  const [stats, dispatch] = useReducer(reducer, {
+  const [stats, setLeaveFeedback] = useReducer(reducer, {
     good: 0,
     neutral: 0,
     bad: 0,
   });
-
-  const onLeaveFeedback = (name: LeaveFeedback) => {
-    dispatch(name);
-  };
 
   const totalCountFeedback = (): number => {
     return Object.values(stats).reduce((total, value) => (total += value), 0);
@@ -49,7 +41,7 @@ const App = () => {
   return (
     <>
       <Section title={'Please leave feedback'}>
-        <FeedbackOptions options={stats} onLeaveFeedback={onLeaveFeedback} />
+        <FeedbackOptions options={stats} onLeaveFeedback={setLeaveFeedback} />
       </Section>
       <Section title={'Statistics'}>
         {totalCountFeedback() ? (
